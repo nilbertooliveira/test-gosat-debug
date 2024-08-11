@@ -1,0 +1,107 @@
+services:
+
+    app:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+        extra_hosts:
+            - host.docker.internal:host-gateway
+            - front-app.local.com.br:host-gateway
+        image: nilbertooliveira/php:7-fpm-alpine
+        container_name: app
+        restart: unless-stopped
+        tty: true
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+            PHP_IDE_CONFIG: "serverName=docker"
+            COMPOSER_MEMORY_LIMIT: -1
+            COMPOSER_ALLOW_SUPERUSER: 1
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+            - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            app-network:
+                ipv4_address: 172.27.0.2
+
+    webserver:
+        image: 'bitnami/nginx:latest'
+        container_name: webserver
+        restart: unless-stopped
+        tty: true
+        working_dir: /var/www
+        ports:
+            - "8081:80"
+        environment:
+            - VIRTUAL_HOST=app.local.com.br
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/conf.d/app.conf:/opt/bitnami/nginx/conf/server_blocks/server_block.conf
+        extra_hosts:
+            - host.docker.internal:host-gateway
+            - front-app.local.com.br:host-gateway
+        networks:
+            app-network:
+                ipv4_address: 172.27.0.3
+
+    db:
+        build:
+            context: docker/postgres
+            dockerfile: Dockerfile
+        image: nilbertooliveira/postgres:latest
+        container_name: postgres
+        restart: always
+        environment:
+            POSTGRES_USER: app
+            POSTGRES_DB: app
+            POSTGRES_PASSWORD: app
+        command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+            - ./docker/postgres/postgresql.conf:/etc/postgresql/postgresql.conf
+        ports:
+            - "5432:5432"
+
+        networks:
+            app-network:
+                ipv4_address: 172.27.0.5
+
+    nginx-proxy:
+        container_name: 'nginx-proxy'
+        image: jwilder/nginx-proxy
+        restart: unless-stopped
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+            - ./docker/nginx/nginx-proxy/conf.d:/etc/nginx/conf.d
+            - ./docker/nginx/nginx-proxy/conf.d/vhost.d:/etc/nginx/vhost.d/
+        ports:
+            - "80:80"
+        networks:
+            app-network:
+                ipv4_address: 172.27.0.98
+
+    redis:
+        image: 'bitnami/redis:latest'
+        container_name: redis
+        restart: unless-stopped
+        tty: true
+        environment:
+            - ALLOW_EMPTY_PASSWORD=yes
+        volumes:
+            - redis-data:/bitnami
+        networks:
+            app-network:
+                ipv4_address: 172.27.0.90
+        ports:
+            - "6379:6379"
+
+
+networks:
+    app-network:
+        external: true
+
+volumes:
+    redis-data:
+    postgres-data:
+
