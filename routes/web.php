@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestDebugController;
 
@@ -20,3 +21,5 @@ Route::get('/', function () {
 
 
 Route::get('test', [TestDebugController::class, 'index']);
+
+Route::get('test-red-doc', [Controller::class, 'testRedDoc']);

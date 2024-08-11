@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 
+#[OpenApi\PathItem]
 class TestDebugController extends Controller
 {
     /**
@@ -11,6 +13,7 @@ class TestDebugController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    #[OpenApi\Operation]
     public function index(Request $request)
     {
         return view('debug.test', [])->render();
@@ -21,6 +24,7 @@ class TestDebugController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    #[OpenApi\Operation]
     public function create()
     {
         //
@@ -32,6 +36,7 @@ class TestDebugController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    #[OpenApi\Operation]
     public function store(Request $request)
     {
         //
@@ -43,6 +48,7 @@ class TestDebugController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    #[OpenApi\Operation]
     public function show($id)
     {
         //
@@ -54,6 +60,7 @@ class TestDebugController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    #[OpenApi\Operation]
     public function edit($id)
     {
         //
@@ -66,6 +73,7 @@ class TestDebugController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    #[OpenApi\Operation]
     public function update(Request $request, $id)
     {
         //
@@ -77,6 +85,7 @@ class TestDebugController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    #[OpenApi\Operation]
     public function destroy($id)
     {
         //
