@@ -4,6 +4,10 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @bodyParam name string required The id of the room.
+ * @bodyParam description string The id of the room.
+ */
 class StoreCategoryRequest extends FormRequest
 {
     /**

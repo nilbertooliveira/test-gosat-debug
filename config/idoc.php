@@ -51,7 +51,7 @@ return [
     |
      */
 
-    'logo' => 'https://res.cloudinary.com/ovac/image/upload/h_300,w_380,c_fill,r_30,bo_20px_solid_white/aboust_ey5v1v.jpg',
+    'logo' => 'https://www.gosat.org/wp-content/uploads/2022/05/gosat-logo-600x238-1.png',
 
     'color' => '',
 
@@ -67,16 +67,16 @@ return [
 
     'title' => 'iDoc API Reference',
 
-    'description' => 'iDoc Api secification and documentation.',
+    'description' => 'Gosat API',
 
-    'version' => '',
+    'version' => '1.0',
 
     'terms_of_service' => '',
 
     'contact' => [
-        // 'name' => 'YOUR_NAME',
-        // 'email' => 'YOUR_EMAIL',
-        // 'url' => 'YOUR_URL'
+         'name' => 'Nilberto Oliveira',
+         'email' => 'nilberto.oliveira@gosat.com.br',
+         'url' => 'https://www.gosat.org/contato/'
     ],
 
     'license' => [
@@ -272,6 +272,7 @@ return [
              * Note that the route must be referenced by name here (wildcards are supported).
              */
             'exclude' => [
+                'auth.logout'
                 // 'users.create', 'admin.*'
             ],
 
